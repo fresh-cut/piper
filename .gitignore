@@ -23,3 +23,6 @@ go.work
 # Temp files
 *.gz
 *.zip
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/piper.iml

@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"syscall"
 )
 
 type TTS struct {
@@ -39,6 +40,7 @@ func (t *TTS) Synthesize(text string) (wav []byte, err error) {
 
 	stdin := strings.NewReader(text)
 	stderr := bytes.NewBuffer(nil)
+	sysProcAttr := &syscall.SysProcAttr{}
 	cmd := exec.Command(t.piperExe,
 		"--model", t.onnxFn,
 		"--config", t.jsonFn,
@@ -76,7 +78,7 @@ func New(dataDir string, voice asset.Asset) (*TTS, error) {
 	if err != nil {
 		return nil, fmt.Errorf("piper.Install: cannot install piper voice: %w", err)
 	}
-	exeFn, err := installPiper(dataDir)
+	exeFn, err := installPiper(dataDir, voice)
 	if err != nil {
 		return nil, fmt.Errorf("piper.Install: cannot install piper binary: %w", err)
 	}

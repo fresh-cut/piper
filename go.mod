@@ -1,4 +1,4 @@
-module github.com/amitybell/piper
+module github.com/fresh-cut/piper
 
 go 1.21
 

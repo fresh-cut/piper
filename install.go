@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	asset "github.com/amitybell/piper-asset"
 	"io"
 	"io/fs"
 	"os"
@@ -171,11 +172,12 @@ func installVoice(dstDir string, srcFS fs.FS) (desc, onnxFn, jsonFn string, err 
 	return desc, onnxFn, jsonFn, nil
 }
 
-func installPiper(dataDir string) (exeFn string, err error) {
-	pkgDir := filepath.Join(dataDir, "piper-bin-"+piperAsset.Name)
-	exeFn = filepath.Join(pkgDir, piperExe)
+func installPiper(dataDir string, asset asset.Asset) (exeFn string, err error) {
+	pkgDir := filepath.Join(dataDir, "piper-bin-"+asset.Name)
+	//exeFn = filepath.Join(pkgDir, piperExe)
+	exeFn = filepath.Join(pkgDir, ".exe")
 	defer os.Chmod(exeFn, 0755)
-	if err := installArc(pkgDir, piperAsset.FS); err != nil {
+	if err := installArc(pkgDir, asset.FS); err != nil {
 		return "", fmt.Errorf("installPiper: walk embedded fs: %w", err)
 	}
 	return exeFn, nil
